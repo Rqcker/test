@@ -9,3 +9,15 @@ public static int multiply(int m, int n)
 			return m+multiply(m,n-1);
 		}
 	}
+// Just for test 
+if (size>0)
+		{
+			int out=top.getValue();
+			top=top.getNext();
+			size--;
+			return out;
+		}
+		else 
+		{
+			return 0;
+		}
