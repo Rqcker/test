@@ -6,4 +6,8 @@ else {
 		}
     
     // A part of movePile()
-    // 
+    public void testSizeEmpty() {
+		// test l.size() for an empty linked list
+		assertNotEquals("Is not an empty linked list", 0,l.size());
+	}
+// Have some error
