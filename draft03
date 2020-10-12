@@ -11,3 +11,4 @@ else {
 		assertNotEquals("Is not an empty linked list", 0,l.size());
 	}
 // Have some error
+throw new RuntimeException("Is empty!");
