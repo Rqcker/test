@@ -16,3 +16,7 @@ public static int multiply(int m, int n)
 		}
 		return tmp;
 	}
+/* Node newNode = new Node(i); 
+		newNode.setNextNode(headNode); 
+		headNode = newNode; 
+*/
