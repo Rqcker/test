@@ -21,3 +21,8 @@ if (size>0)
 		{
 			return 0;
 		}
+c1 = 12 + 0.2j
+print("c1Value: ", c1)
+print("c1Type", type(c1))
+c2 = 6 - 1.2j
+print("c2Value: ", c2)
