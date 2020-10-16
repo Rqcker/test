@@ -12,3 +12,12 @@ else {
 	}
 // Have some error
 throw new RuntimeException("Is empty!");
+
+
+# for
+list_a = list()
+for a in range(5):
+    list_a.append(a)
+print(list_a)
+# 
+list_b = [b for b in range(5)]
