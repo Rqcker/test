@@ -20,3 +20,36 @@ public static int multiply(int m, int n)
 		newNode.setNextNode(headNode); 
 		headNode = newNode; 
 */
+public void enqueue(Object o){
+		Node node=new Node(o);
+		if(isEmpty())
+		{
+			head=node;
+			tail=node;
+			return;
+		}
+		tail.next=node;
+		tail=node;
+	}
+	
+	// Part 3: complete	
+	public Object dequeue() throws QueueException{
+		if(isEmpty()) {
+			return null;
+		}
+		Object element=head.element;
+		head=head.next;
+		return element;
+	}
+	
+	// Part 3: complete
+	public Object front() throws QueueException{
+		if(isEmpty()) {
+			throw new RuntimeException("Is empty");
+		}
+		Node a = head;
+		head.element=0;
+		return a;
+	}
+	
+}
