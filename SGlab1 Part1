@@ -38,3 +38,14 @@ for(int i=0;i<cmds.length;i++){
 				 pstack.push(cmds[i]);	  
 			 }
 		 }
+
+
+for(int i=0;i<arr.length;i++) {
+				if(arr[i+1]<arr[i]) {           // compare the two numbers and put the smaller number first.
+					int temp;
+					temp=arr[i];
+					arr[i]=arr[i+1];
+					arr[i+1]=temp;
+					swaps=true;
+				}
+			}
