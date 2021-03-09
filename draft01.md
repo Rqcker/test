@@ -1,0 +1,1 @@
+Fxck covid !
