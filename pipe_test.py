@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+# pip test
 """Tests the audacity pipe.
 Keep pipe_test.py short!!
 You can make more complicated longer tests to test other functionality
