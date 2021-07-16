@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 """Tests the audacity pipe.
-Keep pipe_test.py short!!
 You can make more complicated longer tests to test other functionality
 or to generate screenshots etc in other scripts.
 Make sure Audacity is running first and that mod-script-pipe is enabled
