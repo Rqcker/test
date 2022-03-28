@@ -218,7 +218,7 @@ def validateSHACLCosntraints (g,BASE_URL,SYSTEM_IRI):
   validationGraph.parse(data=planData, format='turtle')
   #print(validationGraph.serialize(format="turtle").decode("utf-8"))
 
- r = validate(validationGraph, shacl_graph=None, ont_graph=None, inference=None, abort_on_error=False, meta_shacl=False,advanced=True, js=False,debug=False)
+ r = validate(validationGraph, shacl_graph=None, ont_graph=None, inference=None, abort_on_first=False, meta_shacl=False,advanced=True, js=False,debug=False)
  conforms, results_graph, results_text = r
  
  #combine the validation report graph and combine with the plan (so we can retrieve the details of steps and constraints for the message given to the user) and query for failed constraints
