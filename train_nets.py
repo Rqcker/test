@@ -16,14 +16,17 @@ from scipy.optimize import brentq
 from scipy import interpolate
 from datetime import datetime
 from sklearn import metrics
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 import argparse
 import time
 import os
 
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior() # we need use placeholder
 # slim = tf.contrib.slim
 slim = tf.compat.v1.estimator
+
 
 def get_parser():
     parser = argparse.ArgumentParser(description='parameters to train net')
