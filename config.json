@@ -1,1 +1,72 @@
-{"title": "Pandas Profiling Report", "dataset": {"description": "", "creator": "", "author": "", "copyright_holder": "", "copyright_year": "", "url": ""}, "variables": {"descriptions": {}}, "infer_dtypes": true, "show_variable_description": true, "pool_size": 0, "progress_bar": true, "vars": {"num": {"quantiles": [0.05, 0.25, 0.5, 0.75, 0.95], "skewness_threshold": 20, "low_categorical_threshold": 5, "chi_squared_threshold": 0.999}, "cat": {"length": true, "characters": true, "words": true, "cardinality_threshold": 50, "n_obs": 5, "chi_squared_threshold": 0.999, "coerce_str_to_date": false, "redact": false, "histogram_largest": 50, "stop_words": []}, "image": {"active": true, "exif": true, "hash": true}, "bool": {"n_obs": 3, "mappings": {"t": true, "f": false, "yes": true, "no": false, "y": true, "n": false, "true": true, "false": false}}, "path": {"active": true}, "file": {"active": true}, "url": {"active": true}}, "sort": null, "missing_diagrams": {"bar": true, "matrix": true, "dendrogram": true, "heatmap": true}, "correlations": {"spearman": {"key": "spearman", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, "pearson": {"key": "pearson", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, "kendall": {"key": "kendall", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, "cramers": {"key": "cramers", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, "phi_k": {"key": "phi_k", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}}, "interactions": {"continuous": true, "targets": []}, "categorical_maximum_correlation_distinct": 100, "memory_deep": true, "plot": {"missing": {"force_labels": true, "cmap": "RdBu"}, "image_format": "svg", "correlation": {"cmap": "RdBu", "bad": "#000000"}, "dpi": 800, "histogram": {"bins": 50, "max_bins": 250, "x_axis_labels": true}, "scatter_threshold": 1000, "cat_freq": {"show": true, "type": "bar", "max_unique": 10, "colors": null}}, "duplicates": {"head": 10, "key": "# duplicates"}, "samples": {"head": 10, "tail": 10, "random": 0}, "reject_variables": true, "n_obs_unique": 10, "n_freq_table_max": 10, "n_extreme_obs": 10, "report": {"precision": 10}, "html": {"style": {"primary_color": "#337ab7", "logo": "", "theme": null}, "navbar_show": false, "minify_html": true, "use_local_assets": true, "inline": true, "assets_prefix": null, "assets_path": null, "full_width": true}, "notebook": {"iframe": {"height": "800px", "width": "100%", "attribute": "srcdoc"}}}
+{"title": "Pandas Profiling Report", 
+"dataset": {
+	"description": "", 
+	"creator": "", 
+	"author": "", 
+	"copyright_holder": "", 
+	"copyright_year": "", 
+	"url": ""
+	}, 
+"variables": {
+	"descriptions": {}
+	}, 
+"infer_dtypes": true, "show_variable_description": true, "pool_size": 0, "progress_bar": true, 
+"vars": {
+	"num": {"quantiles": [0.05, 0.25, 0.5, 0.75, 0.95], 
+	"skewness_threshold": 20, 
+	"low_categorical_threshold": 5, 
+	"chi_squared_threshold": 0.999
+	}, 
+	"cat": {
+		"length": true, 
+		"characters": true, 
+		"words": true, 
+		"cardinality_threshold": 50, 
+		"n_obs": 5, 
+		"chi_squared_threshold": 0.999, 
+		"coerce_str_to_date": false, 
+		"redact": false, 
+		"histogram_largest": 50, 
+		"stop_words": []
+		}, 
+		"image": {"active": true, "exif": true, "hash": true}, 
+		"bool": {
+			"n_obs": 3, 
+			"mappings": {
+				"t": true, "f": false, "yes": true, "no": false, "y": true, "n": false, "true": true, "false": false}
+				}, 
+			"path": {"active": true}, 
+			"file": {"active": true}, 
+			"url": {"active": true}
+			}, 
+			"sort": null, 
+			"missing_diagrams": {"bar": true, "matrix": true, "dendrogram": true, "heatmap": true}, 
+			"correlations": {
+				"spearman": 
+				{
+				"key": "spearman", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, 
+				"pearson": {"key": "pearson", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, 
+				"kendall": {"key": "kendall", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, 
+				"cramers": {"key": "cramers", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}, 
+				"phi_k": {"key": "phi_k", "calculate": true, "warn_high_correlations": 10, "threshold": 0.5}
+				}, 
+				"interactions": {"continuous": true, "targets": []}, 
+				"categorical_maximum_correlation_distinct": 100, "memory_deep": true, "plot": {
+					"missing": {"force_labels": true, "cmap": "RdBu"}, 
+					"image_format": "svg", 
+					"correlation": {"cmap": "RdBu", "bad": "#000000"}, 
+					"dpi": 800, "histogram": {"bins": 50, "max_bins": 250, "x_axis_labels": true}, 
+					"scatter_threshold": 1000, "cat_freq": {"show": true, "type": "bar", "max_unique": 10, "colors": null}
+					}, 
+					"duplicates": {"head": 10, "key": "# duplicates"}, 
+					"samples": {"head": 10, "tail": 10, "random": 0}, 
+					"reject_variables": true, "n_obs_unique": 10, "n_freq_table_max": 10, "n_extreme_obs": 10, 
+					"report": {"precision": 10}, 
+					"html": {
+						"style": {"primary_color": "#337ab7", "logo": "", "theme": null}, 
+						"navbar_show": false, "minify_html": true, "use_local_assets": true, "inline": true, "assets_prefix": null, "assets_path": null, "full_width": true
+						}, 
+					"notebook": {
+						"iframe": {"height": "800px", "width": "100%", "attribute": "srcdoc"}
+						}
+}
