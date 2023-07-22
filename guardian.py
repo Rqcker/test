@@ -1,7 +1,7 @@
 import requests
 import json
 
-API_KEY = 'ec740d79-7d0f-4d73-87cf-458e7bcab9cf'
+API_KEY = '0f5a7d4d-8d1b-4d65-8504-ee4688bad5e4'
 query = 'circular economy'
 num_articles = 15000  # Number of articles to retrieve
 articles_per_page = 10  # Number of articles per page
