@@ -1,8 +1,9 @@
 import requests
 import json
 import csv
-import zipfile
-import os
+from time import sleep
+# import zipfile
+# import os
 
 with open('KeywordsList.csv', 'r') as f:
   reader = csv.reader(f)
@@ -14,7 +15,7 @@ with open('KeywordsList.csv', 'r') as f:
 for keyword in keywords:
   API_KEY = '0f5a7d4d-8d1b-4d65-8504-ee4688bad5e4'
   query = keyword
-  num_articles = 10000  # Number of articles to retrieve
+  num_articles = 10  # Number of articles to retrieve
   articles_per_page = 10  # Number of articles per page
 
   # Calculate the number of pages to fetch
@@ -73,16 +74,18 @@ for keyword in keywords:
 
   print(f"Total articles obtained: {len(news_list)}")
   print(f"News data saved as {keyword}.json")
+  print('the Guardian API Bot Sleeping............')
+  sleep(120) # quick break for the API limit :(
 
 print("---Loop Done---")
 print(f"Total number of JSON files created: {len(keywords)}")
 
-# Open a new ZIP file for writing
-with zipfile.ZipFile('keywords.zip', 'w') as zf:
-    # Loop through each JSON file in the output folder
-    for filename in os.listdir('/content/'):
-        # Check if the file ends with .json
-        if filename.endswith('.json'):
-            # Read the JSON file and add it to the ZIP archive
-            with open(os.path.join('/content/', filename), 'rb') as f:
-                zf.writestr(filename, f.read(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+# # Open a new ZIP file for writing
+# with zipfile.ZipFile('keywords.zip', 'w') as zf:
+#     # Loop through each JSON file in the output folder
+#     for filename in os.listdir('/content/'):
+#         # Check if the file ends with .json
+#         if filename.endswith('.json'):
+#             # Read the JSON file and add it to the ZIP archive
+#             with open(os.path.join('/content/', filename), 'rb') as f:
+#                 zf.writestr(filename, f.read(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
