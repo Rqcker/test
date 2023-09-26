@@ -13,7 +13,7 @@ with open('KeywordsList.csv', 'r') as f:
 # print(keywords)
 
 for keyword in keywords:
-  API_KEY = '3ced774f-9345-48e8-b04e-f6bed9bcacff'
+  API_KEY = '099adc21-3e7e-496d-9a07-7d59e0144f3f'
   query = '"' + keyword + '"'
   num_articles = 1000  # Number of articles to retrieve
   articles_per_page = 10  # Number of articles per page
