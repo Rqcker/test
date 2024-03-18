@@ -13,7 +13,7 @@ def clonal_selection(benchmark_number, pop_size, clone_factor, mutation_rate):
     start_time = time.time()
     globalMin, Lb, Ub, nd, max_limit = bh.terminate(benchmark_number)
     population = [np.random.uniform(Lb, Ub, nd) for _ in range(pop_size)]
-
+    print('yes')
     iterations_number = 0
     best_solution = None
     best_fitness = float('inf')
