@@ -1,0 +1,14 @@
+print('NONONONO')
+print('NONONONO')
+print('NONONONO')
+print('NONONONO')
+print('yes, it does not work!')
+print('yes, it does not work!')
+print('yes, it does not work!')
+print('no, it does not work!')
+<<<<<<< HEAD
+print('no, it does not work!')
+=======
+1111
+2222
+>>>>>>> 44c9c2202470e0298612e9db0b092aed2e31659d
