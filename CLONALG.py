@@ -6,6 +6,7 @@ import os
 #test!!!
 #test!!!
 #test!!!
+print('yes')
 print('NONONONO')
 print('NONONONO')
 #print('yes, it works!')
