@@ -3,8 +3,8 @@ import BenchmarksHub as bh
 import pandas as pd
 import time
 import os
-#test!!!
-#print('yes, it works!')
+
+
 def clonal_selection(benchmark_number, pop_size, clone_factor, mutation_rate):
     start_time = time.time()
     globalMin, Lb, Ub, nd, max_limit = bh.terminate(benchmark_number)
