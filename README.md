@@ -1,10 +1,10 @@
 huge diff 333 test test test cool
-YYY
+GGG
 ============
 
-huge diff 111 test test test cool
+huge diff 111 yes test test cool
 =================================
-11
+200
 test 111 333
-33
+300
 ### surprise!
