@@ -1,1 +1,1 @@
-AI and blockchain Test
+My new env and MCP test
