@@ -60,7 +60,10 @@ class GSM8K_Metric(Metric):
             return 0
         try:
             pred_value = float(pred)
-            answer_value = float(answer.replace(",", ""))
+            # 从答案中提取最终数字（#### 后面的数字）
+            answer_match = re.search(r'#### (\d+)', answer)
+            true_answer = answer_match.group(1) if answer_match else answer
+            answer_value = float(true_answer.replace(",", ""))
             # 使用 isclose 比较浮点数
             return 1 if isclose(pred_value, answer_value, rel_tol=1e-5) else 0
         except ValueError:
@@ -126,8 +129,13 @@ class StrategyQA_Metric(Metric):
         pred = pred_options[-1] if pred_options else ""
         return pred
 
-    def cal_acc(self, pred: str, answer: str) -> int:
+    def cal_acc(self, pred: str, answer) -> int:
         if pred == "":
             return 0
+        # 处理布尔值答案
+        if isinstance(answer, bool):
+            answer_str = "yes" if answer else "no"
+        else:
+            answer_str = str(answer).strip().lower()
         # 比较时忽略大小写和多余空格
-        return 1 if pred == answer.strip().lower() else 0
+        return 1 if pred == answer_str else 0

@@ -1,0 +1,174 @@
+#!/bin/bash
+#PBS -N UAG_Baseline_GSM8K_Comprehensive
+#PBS -l walltime=12:00:00
+#PBS -l select=1:ncpus=8:mem=64gb:ngpus=1
+#PBS -j oe
+#PBS -o /rds/general/user/js3623/home/test/baseline_gsm8k_comprehensive.log
+
+echo "=== UAG基线GSM8K实验 (全面评估) ==="
+echo "开始时间: $(date)"
+echo "工作目录: $(pwd)"
+
+# 设置环境变量
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export http_proxy=http://127.0.0.1:7890
+export https_proxy=http://127.0.0.1:7890
+export MKL_INTERFACE_LAYER=LP64,ILP64
+export HF_HOME=/rds/general/user/js3623/home/.cache/huggingface
+export TRANSFORMERS_CACHE=/rds/general/user/js3623/home/.cache/transformers
+
+# 激活conda环境
+source /rds/general/user/js3623/home/anaconda3/bin/activate uag
+
+# 检查GPU
+echo "=== 检查GPU ==="
+nvidia-smi
+
+# 进入工作目录
+cd /rds/general/user/js3623/home/test
+
+echo "=== 开始GSM8K基线实验 (全面评估) ==="
+echo "数据集: GSM8K (1319 samples)"
+echo "模型: Mistral-7B-Instruct-v0.3"
+echo "方法: 标准Chain-of-Thought (不使用UAG)"
+echo "评估: 全面评估指标 (Exact Match, F1, BLEU, ROUGE-L等)"
+
+# 运行基线实验
+python -c "
+import sys
+import os
+import json
+import torch
+import re
+import numpy as np
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from code.comprehensive_metrics import ComprehensiveMetrics
+
+print('=== 加载模型 ===')
+model_name = 'mistralai/Mistral-7B-Instruct-v0.3'
+tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,
+    device_map='auto',
+    local_files_only=True
+)
+
+print('=== 加载评估指标 ===')
+metrics = ComprehensiveMetrics()
+
+print('=== 加载数据 ===')
+with open('GSM8K_input.jsonl', 'r', encoding='utf-8') as f:
+    data = [json.loads(line) for line in f]
+
+print(f'加载了 {len(data)} 个样本')
+
+print('=== 开始基线实验 ===')
+results = []
+comprehensive_results = []
+
+for i, item in enumerate(data):
+    if i % 100 == 0:
+        print(f'处理进度: {i}/{len(data)}')
+    
+    question = item['question']
+    answer = item['answer']
+    
+    # 构建prompt
+    prompt = f'Q: {question}\\nA: Let\\'s think step by step.'
+    
+    # 生成回答
+    inputs = tokenizer(prompt, return_tensors='pt')
+    if torch.cuda.is_available():
+        inputs = {k: v.to(model.device) for k, v in inputs.items()}
+    
+    with torch.no_grad():
+        outputs = model.generate(
+            inputs['input_ids'],
+            max_length=1024,
+            temperature=0.7,
+            do_sample=True,
+            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.eos_token_id
+        )
+    
+    response = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+    
+    # 提取数字答案
+    numbers = re.findall(r'\\d+', response)
+    pred = numbers[-1] if numbers else ''
+    
+    # 从答案中提取最终数字（#### 后面的数字）
+    answer_match = re.search(r'#### (\\d+)', answer)
+    true_answer = answer_match.group(1) if answer_match else answer
+    
+    # 计算基础准确率
+    is_correct = 1 if pred == true_answer else 0
+    
+    # 计算全面评估指标
+    comprehensive_result = metrics.evaluate_sample(
+        prediction=pred,
+        ground_truth=answer,
+        reasoning=response
+    )
+    
+    results.append({
+        'question': question,
+        'answer': answer,
+        'prediction': pred,
+        'response': response,
+        'correct': is_correct,
+        'comprehensive_metrics': comprehensive_result
+    })
+    
+    comprehensive_results.append(comprehensive_result)
+
+# 计算总体指标
+total_correct = sum(r['correct'] for r in results)
+accuracy = total_correct / len(data) * 100
+
+# 计算全面评估指标
+aggregate_metrics = metrics.evaluate_batch(comprehensive_results)
+
+print(f'\\n=== 基线实验结果 ===')
+print(f'总样本数: {len(data)}')
+print(f'正确数: {total_correct}')
+print(f'准确率: {accuracy:.2f}%')
+
+print(f'\\n=== 全面评估结果 ===')
+print(f'Exact Match Accuracy: {aggregate_metrics.get(\"exact_match_accuracy\", 0):.4f}')
+print(f'F1 Score: {aggregate_metrics.get(\"f1_score_mean\", 0):.4f} ± {aggregate_metrics.get(\"f1_score_std\", 0):.4f}')
+print(f'BLEU Score: {aggregate_metrics.get(\"bleu_score_mean\", 0):.4f} ± {aggregate_metrics.get(\"bleu_score_std\", 0):.4f}')
+print(f'ROUGE-L: {aggregate_metrics.get(\"rouge_l_mean\", 0):.4f} ± {aggregate_metrics.get(\"rouge_l_std\", 0):.4f}')
+
+# 打印推理质量指标
+if 'reasoning_step_indicator_ratio_mean' in aggregate_metrics:
+    print(f'\\n=== 推理质量指标 ===')
+    print(f'Step Indicator Ratio: {aggregate_metrics.get(\"reasoning_step_indicator_ratio_mean\", 0):.4f}')
+    print(f'Math Indicator Ratio: {aggregate_metrics.get(\"reasoning_math_indicator_ratio_mean\", 0):.4f}')
+    print(f'Logic Indicator Ratio: {aggregate_metrics.get(\"reasoning_logic_indicator_ratio_mean\", 0):.4f}')
+    print(f'Avg Sentence Length: {aggregate_metrics.get(\"reasoning_avg_sentence_length_mean\", 0):.2f}')
+
+# 保存结果
+os.makedirs('results', exist_ok=True)
+with open('results/GSM8K_baseline_results_comprehensive.jsonl', 'w', encoding='utf-8') as f:
+    for result in results:
+        f.write(json.dumps(result, ensure_ascii=False) + '\\n')
+
+# 保存指标汇总
+with open('results/GSM8K_baseline_metrics_summary.json', 'w', encoding='utf-8') as f:
+    json.dump({
+        'task': 'GSM8K',
+        'method': 'baseline',
+        'total_samples': len(data),
+        'exact_match_accuracy': accuracy / 100,
+        'comprehensive_metrics': aggregate_metrics
+    }, f, indent=2, ensure_ascii=False)
+
+print('\\n结果已保存到:')
+print('- results/GSM8K_baseline_results_comprehensive.jsonl')
+print('- results/GSM8K_baseline_metrics_summary.json')
+"
+
+echo "=== GSM8K基线实验完成 ==="
+echo "结束时间: $(date)"

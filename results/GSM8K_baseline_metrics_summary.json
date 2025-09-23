@@ -1,0 +1,25 @@
+{
+  "task": "GSM8K",
+  "method": "baseline",
+  "total_samples": 1319,
+  "exact_match_accuracy": 0.4488248673237301,
+  "comprehensive_metrics": {
+    "exact_match_accuracy": 0.45034116755117515,
+    "f1_score_mean": 0.027093617797157007,
+    "f1_score_std": 0.02522573506671345,
+    "bleu_score_mean": 0.0,
+    "bleu_score_std": 0.0,
+    "rouge_l_mean": 0.027093617797157007,
+    "rouge_l_std": 0.02522573506671345,
+    "reasoning_step_indicator_ratio_mean": 0.009629932214627657,
+    "reasoning_step_indicator_ratio_std": 0.012130539976196208,
+    "reasoning_math_indicator_ratio_mean": 0.03719493346494859,
+    "reasoning_math_indicator_ratio_std": 0.01587118315085057,
+    "reasoning_logic_indicator_ratio_mean": 0.019663925097932227,
+    "reasoning_logic_indicator_ratio_std": 0.011143067538688762,
+    "reasoning_avg_sentence_length_mean": 14.480820278478713,
+    "reasoning_avg_sentence_length_std": 13.141668162027297,
+    "reasoning_reasoning_length_mean": 115.98104624715694,
+    "reasoning_reasoning_length_std": 59.88170374060906
+  }
+}

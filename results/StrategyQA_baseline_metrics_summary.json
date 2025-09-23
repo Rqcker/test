@@ -1,0 +1,25 @@
+{
+  "task": "StrategyQA",
+  "method": "baseline",
+  "total_samples": 2290,
+  "exact_match_accuracy": 0.49170305676855897,
+  "comprehensive_metrics": {
+    "exact_match_accuracy": 0.49170305676855897,
+    "f1_score_mean": 0.0,
+    "f1_score_std": 0.0,
+    "bleu_score_mean": 0.0,
+    "bleu_score_std": 0.0,
+    "rouge_l_mean": 0.0,
+    "rouge_l_std": 0.0,
+    "reasoning_step_indicator_ratio_mean": 0.006723250656904691,
+    "reasoning_step_indicator_ratio_std": 0.010265997568738541,
+    "reasoning_math_indicator_ratio_mean": 0.004165166461074438,
+    "reasoning_math_indicator_ratio_std": 0.005726849870095156,
+    "reasoning_logic_indicator_ratio_mean": 0.018927824128016097,
+    "reasoning_logic_indicator_ratio_std": 0.01105906771203319,
+    "reasoning_avg_sentence_length_mean": 15.921079399420696,
+    "reasoning_avg_sentence_length_std": 5.431225456967681,
+    "reasoning_reasoning_length_mean": 132.1751091703057,
+    "reasoning_reasoning_length_std": 80.37658847160073
+  }
+}

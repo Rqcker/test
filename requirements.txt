@@ -1,8 +1,11 @@
-transformers>=4.46.2
+transformers
 torch
 numpy
-sklearn
+scikit-learn
 tqdm
 datasets
 einops
 sentence-transformers
+accelerate 
+safetensors 
+huggingface_hub
