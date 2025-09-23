@@ -5,50 +5,50 @@
 #PBS -q v1_gpu72
 #PBS -j oe
 
-echo "=== 修复后的UAG GSM8K实验 ==="
-echo "开始时间: $(date)"
-echo "工作目录: $PWD"
+echo "=== UAG GSM8K (Fixed) ==="
+echo "Start time: $(date)"
+echo "Working directory: $PWD"
 
-# 设置环境变量
-export HF_HOME=/rds/general/user/js3623/home/.cache/huggingface
-export TRANSFORMERS_CACHE=/rds/general/user/js3623/home/.cache/huggingface
+# Environment variables
+export HF_HOME=$HOME/.cache/huggingface
+export TRANSFORMERS_CACHE=$HOME/.cache/huggingface
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export MKL_INTERFACE_LAYER=LP64
 
-# 检查GPU
-echo "=== 检查GPU ==="
+# Check GPU
+echo "=== Check GPU ==="
 nvidia-smi
 
-# 激活conda环境
-echo "=== 激活conda环境 ==="
-source /rds/general/user/js3623/home/anaconda3/etc/profile.d/conda.sh
+# Activate conda environment
+echo "=== Activate conda environment ==="
+source $HOME/anaconda3/etc/profile.d/conda.sh
 conda activate uag
 
-# 切换到工作目录
-cd /rds/general/user/js3623/home/test
+# Change to working directory
+cd $PWD
 
-echo "=== 开始修复后的UAG GSM8K实验 ==="
-echo "数据集: GSM8K (1319 samples)"
-echo "模型: Mistral-7B-Instruct-v0.3"
-echo "方法: 真正的UAG (Uncertainty-aware Adaptive Guidance)"
-echo "包含: 不确定性计算、演示聚类、自适应推理"
-echo "修复: 所有模块导入和数据格式问题"
+echo "=== Start UAG GSM8K (Fixed) ==="
+echo "Dataset: GSM8K (1319 samples)"
+echo "Model: Mistral-7B-Instruct-v0.3"
+echo "Method: True UAG (Uncertainty-aware Adaptive Guidance)"
+echo "Includes: Uncertainty computation, demo clustering, adaptive reasoning"
+echo "Fixes: All import and data format issues"
 
-# 运行修复后的UAG实验
+# Run fixed UAG experiment
 python -c "
 import sys
 import os
-sys.path.append('/rds/general/user/js3623/home/test')
-os.chdir('/rds/general/user/js3623/home/test')
+sys.path.append(os.getcwd())
+os.chdir(os.getcwd())
 from code.uag import UAGFixed
 import argparse
 
 # Set all required UAG parameters
 args = argparse.Namespace()
 args.task = 'GSM8K'
-args.data_path = '/rds/general/user/js3623/home/test/GSM8K_input.jsonl'
-args.record_path = '/rds/general/user/js3623/home/test/results/GSM8K_uag_results_fixed.jsonl'
-args.demonstration_path = '/rds/general/user/js3623/home/test/GSM8K_input.jsonl'
+args.data_path = 'GSM8K_input.jsonl'
+args.record_path = 'results/GSM8K_uag_results_fixed.jsonl'
+args.demonstration_path = 'GSM8K_input.jsonl'
 args.demonstration_number = 16
 args.theta = 16
 args.lambda1 = 0.5
@@ -60,9 +60,9 @@ args.max_new_tokens = 2048
 args.max_loop = 10
 args.device = 'cuda'
 
-print(f'开始运行修复后的UAG实验...')
-print(f'数据集: {args.task}')
-print(f'数据路径: {args.data_path}')
+print(f'Starting fixed UAG experiment...')
+print(f'Task: {args.task}')
+print(f'Data path: {args.data_path}')
 print(f'Theta: {args.theta}')
 print(f'Lambda1: {args.lambda1}, Lambda2: {args.lambda2}')
 print(f'K: {args.k}')
@@ -70,10 +70,10 @@ print(f'K: {args.k}')
 uag = UAGFixed(args)
 accuracy = uag.process()
 
-print(f'\n=== 实验完成! ===')
-print(f'GSM8K UAG准确率: {accuracy:.4f}')
-print(f'结果已保存到: {args.record_path}')
+print(f'\n=== Completed! ===')
+print(f'GSM8K UAG accuracy: {accuracy:.4f}')
+print(f'Results saved to: {args.record_path}')
 "
 
-echo "=== 修复后的UAG GSM8K实验完成 ==="
-echo "结束时间: $(date)"
+echo "=== UAG GSM8K completed ==="
+echo "End time: $(date)"

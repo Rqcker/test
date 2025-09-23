@@ -14,7 +14,7 @@ from sklearn.cluster import KMeans
 import numpy as np
 from tqdm import tqdm
 
-# 使用sentence-transformers作为替代嵌入模型
+# Use sentence-transformers as an alternative embedding model
 try:
     from sentence_transformers import SentenceTransformer
     EMBEDDING_MODEL_AVAILABLE = True
@@ -41,7 +41,7 @@ class UAGFixed:
         # Load model with GPU optimization
         print(f"Loading model: {self.model_name}")
         if self.device == "cuda":
-            # GPU模式：使用device_map自动分配
+            # GPU mode: use device_map for automatic placement
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_name,
                 torch_dtype=torch.float16,
@@ -50,7 +50,7 @@ class UAGFixed:
                 low_cpu_mem_usage=True
             )
         else:
-            # CPU模式
+            # CPU mode
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_name,
                 torch_dtype=torch.float16,
@@ -61,12 +61,12 @@ class UAGFixed:
         
         self.model.eval()
 
-        # Initialize embedding model (使用替代方案)
+        # Initialize embedding model (fallback supported)
         print("Loading embedding model: sentence-transformers/all-MiniLM-L6-v2")
         if EMBEDDING_MODEL_AVAILABLE:
             try:
-                # 设置缓存目录
-                cache_folder = os.environ.get('HF_HOME', '/rds/general/user/js3623/home/.cache/huggingface')
+                # Set cache directory
+                cache_folder = os.environ.get('HF_HOME', os.path.expanduser('~/.cache/huggingface'))
                 self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder=cache_folder)
             except Exception as e:
                 print(f"Warning: Failed to load sentence-transformers model: {e}")
@@ -102,16 +102,16 @@ class UAGFixed:
         """Load input data"""
         self.data = []
         with open(self.data_path, "r", encoding="utf-8") as f:
-            # 检查文件格式：JSONL vs JSON
+            # Detect file format: JSONL vs JSON
             first_line = f.readline().strip()
-            f.seek(0)  # 重置文件指针
+            f.seek(0)  # Reset file pointer
             
             if first_line.startswith('['):
-                # JSON数组格式
+                # JSON array format
                 data = json.load(f)
                 self.data = data
             else:
-                # JSONL格式
+                # JSONL format
                 for line in f:
                     if line.strip():
                         item = json.loads(line.strip())
@@ -164,15 +164,15 @@ class UAGFixed:
 
         if self.demonstration_path is not None:
             with open(self.demonstration_path, "r", encoding="utf-8") as f:
-                # 检查文件格式：JSONL vs JSON
+                # Detect file format: JSONL vs JSON
                 first_line = f.readline().strip()
-                f.seek(0)  # 重置文件指针
+                f.seek(0)  # Reset file pointer
                 
                 if first_line.startswith('['):
-                    # JSON数组格式
+                    # JSON array format
                     data = json.load(f)
                     for item in data:
-                        # 转换StrategyQA格式到演示格式
+                        # Convert StrategyQA-format item to demonstration format
                         if self.task == "StrategyQA":
                             demo = {
                                 "question": item["question"],
@@ -182,7 +182,7 @@ class UAGFixed:
                             demo = item
                         self.demonstrations.append(demo)
                 else:
-                    # JSONL格式
+                    # JSONL format
                     for line in f:
                         if line.strip():
                             demo = json.loads(line.strip())
@@ -197,7 +197,7 @@ class UAGFixed:
         # Compute embeddings for each demonstration
         demonstration_texts = []
         for demo in self.demonstrations:
-            # 使用question和answer构建文本
+            # Build text using question and answer
             if "reasoning" in demo:
                 text = demo["question"] + "\n" + demo["reasoning"]
             else:
@@ -208,7 +208,7 @@ class UAGFixed:
         if self.embedding_model is not None:
             embeddings = self.embedding_model.encode(demonstration_texts)
         else:
-            # 使用随机嵌入作为fallback
+            # Use random embeddings as a fallback
             embeddings = np.random.randn(len(demonstration_texts), 384)
             print("Warning: Using random embeddings")
 
@@ -313,7 +313,7 @@ class UAGFixed:
                 # Compute selection scores for selected demonstrations
                 demo_scores = []
                 for similarity, demo in selected:
-                    # 构建演示文本，使用answer作为reasoning
+                    # Build demonstration text; use answer as reasoning
                     if "reasoning" in demo:
                         demo_text = demo["question"] + "\n" + demo["reasoning"]
                     else:
@@ -345,7 +345,7 @@ class UAGFixed:
             reasoning_extended = False
             for selection_score, demo in best_demos_per_cluster:
                 # Construct new prompt with demonstration and truncated reasoning chain
-                # 使用answer作为reasoning，如果没有reasoning字段
+                # Use answer as reasoning if the 'reasoning' field is absent
                 if "reasoning" in demo:
                     demo_reasoning = demo["reasoning"]
                 else:

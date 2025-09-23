@@ -45,13 +45,13 @@ class GSM8K_Metric(Metric):
         super().__init__()
 
     def process_pred(self, response: str) -> str:
-        # 提取 "the answer is" 后的部分
+        # Extract the part after "the answer is"
         pred = response.split("the answer is")[-1]
-        # 移除逗号和多余的空格
+        # Remove commas and superfluous whitespace
         pred = pred.replace(",", "").strip()
-        # 使用正则表达式匹配数字，包括整数和小数
+        # Match numeric values (integers and decimals)
         pred_numbers = re.findall(r"-?\d+(?:\.\d+)?", pred)
-        # 如果找到数字，取最后一个作为预测值
+        # Use the last matched number if present
         pred = pred_numbers[-1] if pred_numbers else ""
         return pred
 
@@ -60,11 +60,11 @@ class GSM8K_Metric(Metric):
             return 0
         try:
             pred_value = float(pred)
-            # 从答案中提取最终数字（#### 后面的数字）
+            # Extract final numeric answer from ground truth (after '####')
             answer_match = re.search(r'#### (\d+)', answer)
             true_answer = answer_match.group(1) if answer_match else answer
             answer_value = float(true_answer.replace(",", ""))
-            # 使用 isclose 比较浮点数
+            # Compare floats using isclose
             return 1 if isclose(pred_value, answer_value, rel_tol=1e-5) else 0
         except ValueError:
             return 0
@@ -90,18 +90,18 @@ class AQuA_Metric(Metric):
         super().__init__()
 
     def process_pred(self, response: str) -> str:
-        # 提取 "the answer is" 后的部分并转换为大写
+        # Extract the part after "the answer is" and convert to upper-case
         pred = response.split("the answer is")[-1].strip().upper()
-        # 匹配选项 A-E
+        # Match options A-E
         pred_options = re.findall(r"[A-E]", pred)
-        # 如果找到选项，取最后一个作为预测值
+        # Use the last matched option if present
         pred = pred_options[-1] if pred_options else ""
         return pred
 
     def cal_acc(self, pred: str, answer: str) -> int:
         if pred == "":
             return 0
-        # 比较时忽略大小写和多余空格
+        # Case-insensitive comparison ignoring superfluous whitespace
         return 1 if pred == answer.strip().upper() else 0
 
 
@@ -121,21 +121,21 @@ class StrategyQA_Metric(Metric):
         super().__init__()
 
     def process_pred(self, response: str) -> str:
-        # 提取 "the answer is" 后的部分并转换为小写
+        # Extract the part after "the answer is" and convert to lower-case
         pred = response.split("the answer is")[-1].lower()
-        # 匹配 "yes" 或 "no"
+        # Match "yes" or "no"
         pred_options = re.findall(r"\b(yes|no)\b", pred)
-        # 如果找到答案，取最后一个作为预测值
+        # Use the last matched token if present
         pred = pred_options[-1] if pred_options else ""
         return pred
 
     def cal_acc(self, pred: str, answer) -> int:
         if pred == "":
             return 0
-        # 处理布尔值答案
+        # Handle boolean ground-truth
         if isinstance(answer, bool):
             answer_str = "yes" if answer else "no"
         else:
             answer_str = str(answer).strip().lower()
-        # 比较时忽略大小写和多余空格
+        # Case-insensitive comparison ignoring superfluous whitespace
         return 1 if pred == answer_str else 0
